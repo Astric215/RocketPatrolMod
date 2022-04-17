@@ -40,7 +40,7 @@ class Play extends Phaser.Scene {
       // initialize score
       this.p1Score = 0;
       //display score
-      let scoreConfig = {
+      this.scoreConfig = {
          fontFamily: 'Courier',
          fontSize: '28px',
          backgroundColor: '#F3B141',
@@ -52,18 +52,12 @@ class Play extends Phaser.Scene {
          },
          fixedWidth:100
       }
-      this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
+      this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, this.scoreConfig);
       //game over flag
       this.gameOver = false;
       
       // 60 sec times
-      scoreConfig.fixedWidth = 0;
-      this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
-         this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-         this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu',scoreConfig).setOrigin(0.5);
-         this.gameOver = true;
-      }, null, this);
-
+      this.scoreConfig.fixedWidth = 0;
       //display score
       let timerConfig = {
          fontFamily: 'Courier',
@@ -111,6 +105,11 @@ class Play extends Phaser.Scene {
       if(this.checkCollision(this.p1Rocket, this.ship01)) {
          this.p1Rocket.reset();
          this.shipExplode(this.ship01);
+      }
+      if(this.startTime == 0) {
+         this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', this.scoreConfig).setOrigin(0.5);
+         this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu',this.scoreConfig).setOrigin(0.5);
+         this.gameOver = true;
       }
    }
 
