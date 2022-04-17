@@ -55,6 +55,7 @@ class Play extends Phaser.Scene {
       this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
       //game over flag
       this.gameOver = false;
+      
       // 60 sec times
       scoreConfig.fixedWidth = 0;
       this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
@@ -62,6 +63,25 @@ class Play extends Phaser.Scene {
          this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu',scoreConfig).setOrigin(0.5);
          this.gameOver = true;
       }, null, this);
+
+      //display score
+      let timerConfig = {
+         fontFamily: 'Courier',
+         fontSize: '28px',
+         backgroundColor: '#F3B141',
+         color: '#843605',
+         align: 'right',
+         padding: {
+            top: 5,
+            bottom: 5,
+         },
+         fixedWidth:100
+      }
+
+      this.startTime = game.settings.gameTimer;
+      this.callTimer = this.time.addEvent({delay:1000, callback: this.timerTick, callbackScope: this, loop:true});
+      this.timerRight = this.add.text(game.config.width - borderPadding*13, borderUISize + borderPadding*2, this.startTime/1000, timerConfig);
+      
    }
 
    update() {
@@ -94,6 +114,14 @@ class Play extends Phaser.Scene {
       }
    }
 
+   timerTick(){
+      if(this.startTime > 0){
+         this.startTime -= 1000;
+      }
+      
+      //update time
+      this.timerRight.text = this.startTime/1000;
+   }
    checkCollision(rocket, ship) {
       //simple AABB checking
       if (rocket.x < ship.x + ship.width && rocket.x +rocket.width > ship.x &&
