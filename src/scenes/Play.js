@@ -144,6 +144,8 @@ class Play extends Phaser.Scene {
       });
       //score add and reprint
       this.p1Score+=ship.points;
+      this.startTime += ship.points*100;
+      this.timerRight.text = Math.ceil(this.startTime/1000);
       this.scoreLeft.text = this.p1Score;
       this.sound.play('sfx_explosion');
    }
