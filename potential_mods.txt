@@ -34,7 +34,7 @@ Ones ill do:
     -Randomize each spaceship's movement direction at the start of each play (5)
     -Implement parallax scrolling (10)
     -Display the time remaining (in seconds) on the screen (10)
-    Create a new spaceship type (w/ new artwork) that's smaller, moves faster, and is worth more points (20)
+    -Create a new spaceship type (w/ new artwork) that's smaller, moves faster, and is worth more points (20)
     -Implement a new timing/scoring mechanism that adds time to the clock for successful hits (20)
     Implement an simultaneous two-player mode (30)
     

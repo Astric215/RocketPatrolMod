@@ -6,6 +6,7 @@ class Play extends Phaser.Scene {
       //load images/tile sprites
       this.load.image('rocket', './assets/rocket.png');
       this.load.image('spaceship', './assets/spaceship.png');
+      this.load.image('smallship', './assets/smallship.png');
       this.load.image('starfield', './assets/starfield.png');
       this.load.image('meteors', './assets/meteors.png');
       this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
@@ -29,10 +30,13 @@ class Play extends Phaser.Scene {
       keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
       keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
       keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-      // add spaceships (x3)
-      this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'spaceship', 0, 30).setOrigin(0, 0);
-      this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'spaceship', 0, 20).setOrigin(0,0);
-      this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'spaceship', 0, 10).setOrigin(0,0);
+      // add spaceships (x3)game.config.width, borderUISize*6 + borderPadding*4
+      this.ship03 = new Spaceship(this, game.config.width, borderUISize*8 + borderPadding*6, 'spaceship', 0, 10).setOrigin(0, 0);
+      this.ship01 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'spaceship', 0, 30).setOrigin(0,0);
+      this.ship02 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'spaceship', 0, 20).setOrigin(0,0);
+      this.smallship = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'smallship', 0, 10).setOrigin(0,0);
+      this.smallship.moveSpeed += 2;
+      this.smallship.points = 60;
       //flip if going the opposite dir
       if(!this.ship01.dirLeft){
          this.ship01.flipX = true;
@@ -42,6 +46,9 @@ class Play extends Phaser.Scene {
       }
       if(!this.ship03.dirLeft){
          this.ship03.flipX = true;
+      }
+      if(!this.smallship.dirLeft){
+         this.smallship.flipX = true;
       }
       //CREATE anim
       this.anims.create({
@@ -106,8 +113,13 @@ class Play extends Phaser.Scene {
          this.ship01.update();               // update spaceships (x3)
          this.ship02.update();
          this.ship03.update();
+         this.smallship.update();
       }
       //check collision
+      if(this.checkCollision(this.p1Rocket, this.smallship)) {
+         this.p1Rocket.reset();
+         this.shipExplode(this.smallship);
+      }
       if(this.checkCollision(this.p1Rocket, this.ship03)) {
          this.p1Rocket.reset();
          this.shipExplode(this.ship03);
@@ -140,6 +152,7 @@ class Play extends Phaser.Scene {
       this.ship01.moveSpeed += 4;
       this.ship02.moveSpeed += 4;
       this.ship03.moveSpeed += 4;
+      this.smallship.moveSpeed += 4;
    }
    checkCollision(rocket, ship) {
       //simple AABB checking
