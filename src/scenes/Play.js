@@ -87,7 +87,8 @@ class Play extends Phaser.Scene {
       this.startTime = game.settings.gameTimer;
       this.callTimer = this.time.addEvent({delay:1000, callback: this.timerTick, callbackScope: this, loop:true});
       this.timerRight = this.add.text(game.config.width - borderPadding*13, borderUISize + borderPadding*2, this.startTime/1000, timerConfig);
-      
+      //speed up after 30secs
+      this.speedUp = this.time.addEvent({delay:30000, callback: this.speedUpShips, callbackScope: this, loop:true});
    }
 
    update() {
@@ -133,6 +134,12 @@ class Play extends Phaser.Scene {
       
       //update time
       this.timerRight.text = this.startTime/1000;
+   }
+
+   speedUpShips(){
+      this.ship01.moveSpeed += 4;
+      this.ship02.moveSpeed += 4;
+      this.ship03.moveSpeed += 4;
    }
    checkCollision(rocket, ship) {
       //simple AABB checking
